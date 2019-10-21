@@ -9,5 +9,7 @@ logs
 !.vscode/launch.json
 !.vscode/extensions.json
 dist/**/*
+!dist/index.html
+!dist/require.js
 .DS_Store
 Thumbs.db
