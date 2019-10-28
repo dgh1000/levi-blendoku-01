@@ -1,7 +1,6 @@
-import { scale_3_2 } from "./util";
+import { scale_3_2, colorToHsl, Color } from "./util";
 
 
-export type Color = {h: number, s: number, l: number}
 
 export class Square {
     xc: number;
@@ -31,10 +30,12 @@ export class Grid {
     }
 
     draw(canv: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
-
+        for (let s of this.squares) {
+            this.drawOneSquare(ctx, s);
+        }
     }
 
-    drawOneSquare(s: Square) {
+    drawOneSquare(ctx: CanvasRenderingContext2D, s: Square) {
         let xc = this.center.x;
         let yc = this.center.y;
         let x0 = xc + s.xc * this.cellSize;
@@ -43,6 +44,8 @@ export class Grid {
         let xL = x0 - this.cellSize/2;
         let yT = y0 - this.cellSize/2;
         let yB = y0 + this.cellSize/2;
+        ctx.fillStyle = colorToHsl(s.col);
+        ctx.fillRect(xR, yT, xR-xL, yB-yT);
         
     }
 }
