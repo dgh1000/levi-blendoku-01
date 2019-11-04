@@ -1,19 +1,21 @@
-import { scale_3_2, colorToHsl, Color } from "./util";
+import { scale_3_2, colorToHsl, Color, Point } from "./util";
 
 
 
 export class Square {
-    xc: number;
-    yc: number;
+    xCell: number;
+    yCell: number;
+    size: number;
     col: Color;
+    upRight: Point;
+    lowLeft: Point;
     constructor(xc: number, yc: number, col: Color) {
-        this.xc = xc;
-        this.yc = yc;
+        this.xCell = xc;
+        this.yCell = yc;
         this.col = col;
     }
 }
 
-type Point = {x: number, y: number}
 
 export class Grid {
     center: Point;
@@ -36,14 +38,14 @@ export class Grid {
     }
 
     drawOneSquare(ctx: CanvasRenderingContext2D, s: Square) {
-        let xc = this.center.x;
-        let yc = this.center.y;
-        let x0 = xc + s.xc * this.cellSize;
-        let y0 = yc + s.yc * this.cellSize;
-        let xR = x0 + this.cellSize/2;
-        let xL = x0 - this.cellSize/2;
-        let yT = y0 - this.cellSize/2;
-        let yB = y0 + this.cellSize/2;
+        let xCenterCoord = this.center.x;
+        let yCenterCoord = this.center.y;
+        let xCellCenterCoord = xCenterCoord + s.xCell * this.cellSize;
+        let yCellCenterCoord = yCenterCoord + s.yCell * this.cellSize;
+        let xR = xCellCenterCoord + this.cellSize/2;
+        let xL = xCellCenterCoord - this.cellSize/2;
+        let yT = yCellCenterCoord - this.cellSize/2;
+        let yB = yCellCenterCoord + this.cellSize/2;
         ctx.fillStyle = colorToHsl(s.col);
         ctx.fillRect(xR, yT, xR-xL, yB-yT);
         
