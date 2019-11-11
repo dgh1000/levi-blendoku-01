@@ -34,6 +34,21 @@ export class Point {
     }
 }
 
+export class Rect {
+    upperLeft: Point;
+    lowerRight: Point;
+    constructor(upperLeft, lowerRight) {
+        this.upperLeft = upperLeft;
+        this.lowerRight = lowerRight;
+    }
+
+    rect(ctx: CanvasRenderingContext2D) {
+        ctx.rect(this.upperLeft.x, this.upperLeft.y, 
+                 this.lowerRight.x - this.upperLeft.x,
+                 this.lowerRight.y - this.upperLeft.y)
+    }
+}
+
 
 
 export type Color = { h: number, s: number, l: number }

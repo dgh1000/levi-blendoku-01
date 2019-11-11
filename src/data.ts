@@ -1,22 +1,39 @@
-import { scale_3_2, colorToHsl, Color, Point } from "./util";
+import { scale_3_2, colorToHsl, Color, Point, Rect } from "./util";
 
 
 
-export class Square {
-    xCell: number;
-    yCell: number;
-    size: number;
-    col: Color;
-    upRight: Point;
-    lowLeft: Point;
-    constructor(xc: number, yc: number, col: Color) {
-        this.xCell = xc;
-        this.yCell = yc;
+export class Cell {
+    col: number;
+    row: number;
+    color: Color;
+    constructor(col: number, row: number, color: Color) {
         this.col = col;
+        this.row = row;
+        this.color = color;
+    }
+
+    computeRect(col: number, row: number, center: Point): Rect {
+        let w: number = 50;
+        let cellPoint: Point = center.add(new Point(col*w, row*w))
+        let size: Point = new Point(1, 1).scale(w/2);
+        let ul: Point = cellPoint.sub(size);
+        let lr: Point = cellPoint.add(size);
+        return new Rect(ul, lr);
+    }
+
+    draw(ctx: CanvasRenderingContext2D, center: Point): void {
+        let r: Rect = this.computeRect(this.col, this.row, center);
+        ctx.beginPath();
+        r.rect(ctx);
+        ctx.closePath();
+        ctx.fillStyle = colorToHsl(this.color);
+        ctx.fill();
     }
 }
 
 
+
+/*
 export class Grid {
     center: Point;
     cellSize: number;
@@ -51,4 +68,4 @@ export class Grid {
         
     }
 }
-
+*/
