@@ -56,3 +56,24 @@ export type Color = { h: number, s: number, l: number }
 export function colorToHsl(col: Color) {
     return `hsl(${col.h}, ${col.s}%, ${col.l}%`;
 }
+
+export function colorStep(beginColor: Color, endColor: Color, nSteps: number): Color[] {
+    let out: Color[] = [];
+    for(let i: number = 0; i <= nSteps; i++) {
+        out.push( {h:(scale_3_2(0, i, nSteps, beginColor.h, endColor.h)),
+                   s:(scale_3_2(0, i, nSteps, beginColor.s, endColor.s)),
+                   l:(scale_3_2(0, i, nSteps, beginColor.l, endColor.l))});
+    }
+    return out;
+} 
+
+export function centerLines(canv: HTMLCanvasElement, ctx: CanvasRenderingContext2D): void {
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "red";
+    ctx.beginPath();
+    ctx.moveTo(0, canv.height/2);
+    ctx.lineTo(canv.width, canv.height/2);
+    ctx.moveTo(canv.width/2, 0);
+    ctx.lineTo(canv.width/2, canv.height);
+    ctx.stroke();
+}
