@@ -31,17 +31,22 @@ export class Cell {
     }
 
     draw(ctx: CanvasRenderingContext2D, center: Point, cellSize: number): void {
-        let r: Rect = this.computeRect(this.col, this.row, center, cellSize);
-        ctx.beginPath();
-        r.rect(ctx);
-        ctx.closePath();
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = "black";
-        ctx.stroke
-        ctx.stroke();
-        if (this.currentColor) {
-            ctx.fillStyle = colorToHsl(this.currentColor);
-            ctx.fill();
+        {
+            let r: Rect = this.computeRect(this.col, this.row, center, cellSize);
+            ctx.beginPath();
+            r.rect(ctx);
+            ctx.closePath();
+            if (this.currentColor) {
+                ctx.fillStyle = colorToHsl(this.currentColor);
+                ctx.lineWidth = 5;
+                ctx.fill();
+                ctx.strokeStyle = "black";
+            } else {
+                r.squircle(ctx);
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = "white";
+            }
+            ctx.stroke();
         }
     }
 }

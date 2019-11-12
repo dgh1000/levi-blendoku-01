@@ -45,7 +45,35 @@ export class Rect {
     rect(ctx: CanvasRenderingContext2D) {
         ctx.rect(this.upperLeft.x, this.upperLeft.y, 
                  this.lowerRight.x - this.upperLeft.x,
-                 this.lowerRight.y - this.upperLeft.y)
+                 this.lowerRight.y - this.upperLeft.y);
+    }
+    
+    squircle(ctx: CanvasRenderingContext2D) {
+        ctx.beginPath();
+        ctx.moveTo(this.upperLeft.x, this.upperLeft.y+10);
+        ctx.arc(this.upperLeft.x+10, this.upperLeft.y+10, 10, Math.PI, 3/2 * Math.PI);
+        ctx.moveTo(this.upperLeft.x, this.upperLeft.y + 10);
+        ctx.lineTo(this.upperLeft.x, this.lowerRight.y - 9);
+        ctx.moveTo(this.upperLeft.x + 10, this.lowerRight.y);
+        ctx.arc(this.upperLeft.x + 10, this.upperLeft.y + 40, 10, 1/2*Math.PI, Math.PI);
+        ctx.moveTo(this.upperLeft.x + 9, this.lowerRight.y);
+        ctx.lineTo(this.lowerRight.x-10, this.lowerRight.y);
+        ctx.moveTo(this.lowerRight.x, this.lowerRight.y-10);
+        ctx.arc(this.lowerRight.x-10, this.lowerRight.y-10, 10, 0, 1/2*Math.PI);
+        ctx.moveTo(this.lowerRight.x, this.lowerRight.y-10);
+        ctx.lineTo(this.lowerRight.x, this.upperLeft.y+10);
+        ctx.moveTo(this.lowerRight.x-10, this.upperLeft.y);
+        ctx.arc(this.lowerRight.x-10, this.upperLeft.y+10, 10, 3/2*Math.PI, 0);
+        ctx.moveTo(this.lowerRight.x -10, this.upperLeft.y);
+        ctx.lineTo(this.upperLeft.x+10, this.upperLeft.y);
+        ctx.closePath();
+    }
+
+    within(p: Point): boolean {
+        return (this.upperLeft.x <= p.x &&
+                this.upperLeft.y <= p.y &&
+                this.lowerRight.x >= p.x && 
+                this.lowerRight.y >= p.y);
     }
 }
 
