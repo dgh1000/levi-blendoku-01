@@ -1,23 +1,28 @@
-import { Cell, Grid } from "./data";
-import { Point, Color, Rect, colorToHsl, centerLines, colorStep } from "./util";
+import { Cell } from "./Cell";
+import { Grid } from "./Grid";
+import { Point, Color, Rect, colorToHsl, centerLines, colorStep, background } from "./util";
+import { Empty } from "./Empty";
 
 let canv = document.getElementById("canv") as HTMLCanvasElement;
 let ctx = canv.getContext("2d");  
 
 canv.addEventListener('click', main2, false);
-
-
+setInterval(main2, 1000/15);
+let i = 0;
 
 function main() {
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, canv.width, canv.height);
+    background(canv, ctx);
     let center = new Point(canv.width/2, canv.height/2);
-    let hasColors = new Grid(center, 50);
+    let hasColors = new Grid(center, 50, true);
+    let emptyCell = new Grid(center, 50, false);
+    hasColors.build(canv, ctx);
     hasColors.draw(canv, ctx);
-    centerLines(canv, ctx);
+    emptyCell.build(canv, ctx);
+    emptyCell.draw(canv, ctx);
+    // centerLines(canv, ctx);
 }
 
-function main2(event ?): void {
+function main3(event ?): void {
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canv.width, canv.height);
     let r = new Rect(new Point(canv.width/2-50, canv.height/2-50), new Point(canv.width/2+50, canv.height/2+100))
@@ -35,7 +40,18 @@ function main2(event ?): void {
     // centerLines(canv, ctx);
 }
 
+function main2(event? : any): void {
+    background(canv, ctx);
+    let center = new Point(canv.width/2, canv.height/2);
+    let test: Empty = new Empty(0, 0, null, {h: 0, s: 0, l: 0})
+    test.draw(ctx, center, 50);
+    if (event)
+        console.log(test.isWithin(center, 50, new Point(event.offsetX, event.offsetY)));
+
+}
+
 main2();
+// main();
 
 
 
