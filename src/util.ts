@@ -105,8 +105,3 @@ export function centerLines(canv: HTMLCanvasElement, ctx: CanvasRenderingContext
     ctx.lineTo(canv.width/2, canv.height);
     ctx.stroke();
 }
-
-export function background(canv: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, canv.width, canv.height);
-}
