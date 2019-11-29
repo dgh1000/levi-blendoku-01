@@ -8,7 +8,7 @@ let ctx = canv.getContext("2d");
 
 
 
-let grid = build1(new Point(canv.width/2, canv.height/2), 50, 10);
+let grid = build1(new Point(canv.width/2, canv.height/2), 50, 10, -5, 3);
 centerLines(canv, ctx);
 
 canv.addEventListener('click', function(evt) {
@@ -19,6 +19,7 @@ function render() {
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canv.width, canv.height);
     grid.draw(canv, ctx);
+    console.log(grid.isCorrect());
     requestAnimationFrame(render); 
     // execution arrives here and render() exits
 }
