@@ -105,3 +105,10 @@ export function centerLines(canv: HTMLCanvasElement, ctx: CanvasRenderingContext
     ctx.lineTo(canv.width/2, canv.height);
     ctx.stroke();
 }
+
+export function shuffle(xs: any[]): void {
+    for(let i = xs.length-1; i > 1; i--) {
+        let j = Math.floor(Math.random()*(i+1));
+        [xs[i], xs[j]] = [xs[j], xs[i]];
+    }
+}

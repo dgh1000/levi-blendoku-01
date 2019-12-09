@@ -1,12 +1,14 @@
 import { Cell, Grid } from "./data";
-import { Point, Color, Rect, colorToHsl, centerLines, colorStep } from "./util";
+import { Point, Color, Rect, colorToHsl, centerLines, colorStep, shuffle } from "./util";
 import { build1 } from "./build"
 
 
 let canv = document.getElementById("canv") as HTMLCanvasElement;
 let ctx = canv.getContext("2d");  
 
-
+// let xs: number[] = [0, 1, 2, 3, 4, 5];
+// shuffle(xs);
+// console.log(xs);
 
 let grid = build1(new Point(canv.width/2, canv.height/2), 50, 10, -5, 3);
 centerLines(canv, ctx);
@@ -19,7 +21,8 @@ function render() {
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canv.width, canv.height);
     grid.draw(canv, ctx);
-    console.log(grid.isCorrect());
+    if (grid.isCorrect())
+        console.log(true);
     requestAnimationFrame(render); 
     // execution arrives here and render() exits
 }

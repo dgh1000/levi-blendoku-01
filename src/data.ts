@@ -59,20 +59,12 @@ export class Grid {
     center: Point;
     cellSize: number;
     cells: Cell[];
-    currentSelection: Cell;
-    constructor(center: Point, cellSize: number) {
+    currentSelection: Cell | void;
+    constructor(center: Point, cellSize: number, cells: Cell[]) {
         this.center = center;
         this.cellSize = cellSize;
-        this.cells = [];
-        this.currentSelection =  new Cell(null, null);
-        let size: number = 13;
-        let colors: Color[] = 
-            colorStep({h: 200, s: 50, l: 50}, {h: 250, s: 90, l: 50}, size);
-        for(let i = 0; i < size; i++) {
-            this.cells.push(
-                new Cell(-Math.floor(size/2) + i, -5, colors[i])
-            );
-        }
+        this.cells = cells
+        this.currentSelection = null;
     }
 
     draw(canv: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
@@ -85,27 +77,27 @@ export class Grid {
         let xClick = event.offsetX;
         let yClick = event.offsetY;
         let p = new Point(xClick, yClick);
+        let s = null;
         for(let c of this.cells) {
             if (c.computeRect(this.center, this.cellSize).within(p)) {
-                if (this.currentSelection.row == null && this.currentSelection.col == null) {
-                    // adds a larger boarder around cell.
-                    c.selected = true;
-                    this.currentSelection = c;
-                }
-                else { 
-                    // deselection of previously selected cell.
-                    // couldnt think of a better way of doing this.
-                    for(let j of this.cells) {
-                        j.selected = false;
-                    }
-                    // for clarity's sake.
-                    let previousSelection = this.currentSelection
-                    // swap the two colors.
-                    let holder: Color = previousSelection.currentColor;
-                    previousSelection.currentColor = c.currentColor;
-                    c.currentColor = holder;
-                    this.currentSelection = new Cell(null, null);
-                }
+                s = c;
+                break;
+            }
+        }
+        if (!s)
+            return;    
+        if (s) {
+            if (this.currentSelection) {
+                // swap
+                let hold = s.currentColor;
+                s.currentColor = this.currentSelection.currentColor;
+                this.currentSelection.currentColor = hold;
+                this.currentSelection.selected = false;
+                this.currentSelection = null;
+            } 
+            else {
+                // highlight
+                s.selected = true;
             }
         }
     }
