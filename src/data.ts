@@ -6,10 +6,13 @@ export class Cell {
     currentColor: Color | void;
     correctColor: Color | void;
     selected: boolean;
-    constructor(col: number, row: number, currentColor ?: Color, correctColor ?: Color) {
+    isAnchor: boolean;
+    constructor(col: number, row: number, isAnchor: boolean,
+                currentColor ?: Color, correctColor ?: Color) {
         this.col = col;
         this.row = row;
         this.selected = false;
+        this.isAnchor = isAnchor;
         if (currentColor) {
             this.currentColor = currentColor
         } else {
@@ -31,27 +34,31 @@ export class Cell {
     }
 
     draw(ctx: CanvasRenderingContext2D, center: Point, cellSize: number): void {
-        {
-            // 
-            let r: Rect = this.computeRect(center, cellSize);
-            ctx.beginPath();
-            r.rect(ctx);
-            ctx.closePath();
-            if (this.currentColor) {
-                ctx.fillStyle = colorToHsl(this.currentColor);
-                ctx.fill();
-                ctx.lineWidth = 1;
-                if (this.selected)
-                    ctx.lineWidth = 3;
-                ctx.strokeStyle = "white";
-            } else {
-                ctx.lineWidth = 1;
-                if (this.selected)
-                    ctx.lineWidth = 3;
-                ctx.strokeStyle = "white";
-            }
-            ctx.stroke();
+        let r: Rect = this.computeRect(center, cellSize);
+        let rectCenter: Point = r.getCenter();
+        ctx.beginPath();
+        r.rect(ctx);
+        ctx.closePath();
+        if (this.currentColor) {
+            ctx.fillStyle = colorToHsl(this.currentColor);
+            ctx.fill();
+            ctx.lineWidth = 1;
+            if (this.selected)
+                ctx.lineWidth = 3;
+            ctx.strokeStyle = "white";
+        } else {
+            ctx.lineWidth = 1;
+            if (this.selected)
+                ctx.lineWidth = 3;
+            ctx.strokeStyle = "white";
         }
+        ctx.stroke();
+        ctx.beginPath();
+        if (this.isAnchor)
+            ctx.arc(rectCenter.x, rectCenter.y, cellSize/6, 0, 2*Math.PI);
+        ctx.closePath();
+        ctx.fillStyle = "white";
+        ctx.fill();
     }
 }
 
@@ -93,15 +100,19 @@ export class Grid {
         //   input state:
         //      selected cell or none
         //      clicked cell or none
+        //      anchored cell has been clicked
         //   output state:
         //      changing colors of cells if necessary
         //      changing selection if necessary
-        //
+        //  
         let xClick = event.offsetX;
         let yClick = event.offsetY;
         let selected = this.findSelectedCell();
         let clicked = this.findClickedCell(new Point(xClick, yClick));
         if (!clicked)
+            return;
+
+        if (clicked.isAnchor)
             return;
 
         if(!selected) {

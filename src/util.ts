@@ -69,6 +69,11 @@ export class Rect {
         ctx.closePath();
     }
 
+    getCenter(): Point{
+        return new Point((this.lowerRight.x + this.upperLeft.x)/2,
+                         (this.lowerRight.y + this.upperLeft.y)/2);
+    }
+
     within(p: Point): boolean {
         return (this.upperLeft.x <= p.x &&
                 this.upperLeft.y <= p.y &&

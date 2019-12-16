@@ -49,6 +49,13 @@ function main2(event ?): void {
     // centerLines(canv, ctx);
 }
 
-
+/**
+ *  Begin: 
+ *     Top row contains random colors that are all movable.
+ *     Bottom row is empty except for one immoveable cell,
+ *     the anchor cell, represented by a while circle.
+ *     An anchor cell cannot be selected, if attemped nothing happens.
+ * 
+ */
 
 
