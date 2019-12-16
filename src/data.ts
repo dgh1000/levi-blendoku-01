@@ -59,12 +59,10 @@ export class Grid {
     center: Point;
     cellSize: number;
     cells: Cell[];
-    currentSelection: Cell | void;
     constructor(center: Point, cellSize: number, cells: Cell[]) {
         this.center = center;
         this.cellSize = cellSize;
         this.cells = cells
-        this.currentSelection = null;
     }
 
     draw(canv: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
@@ -73,33 +71,49 @@ export class Grid {
         }
     }
 
+    findSelectedCell(): Cell | void {
+        for(let c of this.cells) {
+            if (c.selected)
+                return c;
+        }
+        return null;
+    }
+
+    findClickedCell(p: Point): Cell | void {
+        for(let c of this.cells) {
+            if (c.computeRect(this.center, this.cellSize).within(p))
+                return c;
+        }
+        return null;
+    }
+
     receiveClick(event: MouseEvent) {
+        // states that are relevent
+        //
+        //   input state:
+        //      selected cell or none
+        //      clicked cell or none
+        //   output state:
+        //      changing colors of cells if necessary
+        //      changing selection if necessary
+        //
         let xClick = event.offsetX;
         let yClick = event.offsetY;
-        let p = new Point(xClick, yClick);
-        let s = null;
-        for(let c of this.cells) {
-            if (c.computeRect(this.center, this.cellSize).within(p)) {
-                s = c;
-                break;
-            }
+        let selected = this.findSelectedCell();
+        let clicked = this.findClickedCell(new Point(xClick, yClick));
+        if (!clicked)
+            return;
+
+        if(!selected) {
+            if (clicked.currentColor)
+                clicked.selected = true;
+            return;
         }
-        if (!s)
-            return;    
-        if (s) {
-            if (this.currentSelection) {
-                // swap
-                let hold = s.currentColor;
-                s.currentColor = this.currentSelection.currentColor;
-                this.currentSelection.currentColor = hold;
-                this.currentSelection.selected = false;
-                this.currentSelection = null;
-            } 
-            else {
-                // highlight
-                s.selected = true;
-            }
-        }
+
+        let hold = selected.currentColor;
+        selected.currentColor = clicked.currentColor;
+        clicked.currentColor = hold;
+        selected.selected = false;
     }
 
     isCorrect(): boolean {
