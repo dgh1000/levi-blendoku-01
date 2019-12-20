@@ -11,7 +11,6 @@ export function build1(center, size, amount, offset1, offset2): Grid {
         // let offset: number =  1;
         // let row: number = 10;
         out.push(new Cell(-amount/2+.5 + i, offset1, false, hold[i]));
-        out.push(new Cell(-amount/2+.5 + i, offset2, false, null, colors[i]));
         // hold.splice(r, 1);
     }
     for(let i = 0; i < colors.length; i++) {
